@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     legacy({
-      targets: ['es2015', 'safari11', 'ios >= 13'],
+      targets: ['safari >= 13', 'ios >= 13'],
     })
   ],
   base: '/',
