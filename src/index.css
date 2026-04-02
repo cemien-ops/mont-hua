@@ -3605,3 +3605,20 @@ html[data-faction="kraken"] .wl-modal::before {
   background: rgba(110,42,140,0.25);
   border-color: rgba(212,106,158,0.4);
 }
+
+/* ========== NEW CONV BUTTON MOBILE ========== */
+@media (max-width: 768px) {
+  .msg-contacts-header {
+    display: flex !important;
+    padding: 0 0.5rem !important;
+    align-items: center !important;
+    min-width: 50px !important;
+    height: 100% !important;
+    border-bottom: none !important;
+    border-right: 1px solid rgba(110,42,140,0.25) !important;
+    flex-shrink: 0 !important;
+  }
+  .msg-contacts-header span { display: none !important; }
+  .new-conv-btn { width: 32px !important; height: 32px !important; font-size: 1.3rem !important; }
+  .new-conv-inner { width: 92vw !important; max-width: 340px !important; }
+}

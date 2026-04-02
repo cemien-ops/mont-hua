@@ -235,7 +235,20 @@ export default function Messages() {
       localStorage.setItem("mh_messages", JSON.stringify(msgs));
       setTimeout(() => setAllMsgs(getMessages()), 100);
     } else {
-      sendMessage(selectedConv.otherId, input.trim(), encodedAttachments);
+      // Écrit directement dans mh_messages (contourne le filtre faction de sendMessage)
+      const allStoredUsers = JSON.parse(localStorage.getItem("mh_users") || "[]");
+      const recipient = allStoredUsers.find(u => u.id === selectedConv.otherId);
+      if (!recipient) return;
+      const msgs = JSON.parse(localStorage.getItem("mh_messages") || "[]");
+      msgs.push({
+        id: `msg-${Date.now()}`,
+        fromId: user.id, fromPseudo: user.pseudo,
+        toId: recipient.id, toPseudo: recipient.pseudo,
+        content: input.trim(),
+        attachments: encodedAttachments,
+        date: new Date().toISOString(), read: false,
+      });
+      localStorage.setItem("mh_messages", JSON.stringify(msgs));
       setTimeout(() => setAllMsgs(getMessages()), 100);
     }
 
