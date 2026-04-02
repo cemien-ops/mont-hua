@@ -3160,3 +3160,168 @@ html[data-faction="kraken"] .aura-card::before {
 html[data-faction="kraken"] .tab:hover {
   color: #60A5FA !important;
 }
+
+/* ========== MOBILE OPTIMISATION ========== */
+@media (max-width: 768px) {
+
+  /* NAVBAR */
+  .navbar { padding: 0 0.75rem; height: 52px; }
+  .navbar-links { display: none; }
+  .brand-name { font-size: 0.95rem; }
+  .cart-btn { padding: 5px 8px; font-size: 12px; }
+  .user-pseudo-btn { font-size: 0.75rem; padding: 4px 8px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* BURGER MENU */
+  .burger-btn { display: flex !important; }
+  .mobile-menu { top: 52px; padding: 0.75rem; }
+  .mobile-menu button { padding: 14px 1rem; font-size: 1rem; }
+
+  /* MAIN */
+  .main-content { padding-top: 52px; }
+  .page { padding: 0.75rem; }
+
+  /* HOME HERO */
+  .hero { padding: 1.5rem 1rem 1rem; min-height: auto; }
+  .hero-title { font-size: 2rem; }
+  .hero-jp { font-size: 0.8rem; letter-spacing: .2em; }
+  .hero-sub { font-size: 0.82rem; margin-bottom: 1.5rem; }
+  .hero-btns { flex-direction: column; align-items: center; gap: 8px; }
+  .btn-p, .btn-s { width: 100%; max-width: 260px; text-align: center; padding: 12px; }
+
+  /* FEAT CARDS */
+  .feat-grid { grid-template-columns: 1fr; gap: 0.65rem; margin-top: 1.25rem; }
+  .feat-card { padding: 1.1rem 1rem; }
+  .feat-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+  .feat-card h3 { font-size: 1rem; }
+  .feat-card p { font-size: 0.8rem; }
+
+  /* SHOP */
+  .shop-header { padding: 1rem 0 0.5rem; }
+  .shop-header h1 { font-size: 1.4rem; }
+  .shop-header p { font-size: 0.8rem; }
+  .tabs { gap: 6px; overflow-x: auto; padding-bottom: 4px; flex-wrap: nowrap; }
+  .tab { padding: 8px 14px; font-size: 0.8rem; white-space: nowrap; border-radius: 999px !important; }
+
+  /* PERMS */
+  .perms-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+  .perm-card { padding: 0.85rem 0.75rem; border-radius: 14px !important; }
+  .role-name { font-size: 0.85rem; }
+  .deco-badge { font-size: 0.68rem; padding: 2px 6px; }
+  .perm-price { font-size: 0.88rem; }
+  .add-btn { padding: 4px 8px; font-size: 0.72rem; }
+
+  /* ABONNEMENTS */
+  .abo-grid { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
+  .abo-card { padding: 1.25rem 0.85rem; border-radius: 16px !important; }
+  .abo-name { font-size: 1rem; }
+  .abo-price { font-size: 1.4rem; margin-bottom: 1rem; }
+  .abo-add-btn { padding: 0.6rem 0.75rem; font-size: 0.8rem; }
+  .abo-info-btn { width: 34px; height: 34px; }
+
+  /* WHITELIST */
+  .wl-container { max-width: 100%; }
+  .wl-category { padding: 0.85rem 0.9rem; border-radius: 14px !important; }
+  .wl-cat-title { font-size: 0.78rem; margin-bottom: 0.6rem; }
+  .wl-item { padding: 0.55rem 0.75rem; border-radius: 10px !important; }
+  .wl-item-name { font-size: 0.8rem; }
+  .wl-note { font-size: 0.68rem; }
+  .wl-price { font-size: 0.8rem; min-width: 36px; }
+  .wl-notice { font-size: 0.78rem; padding: 0.75rem; }
+
+  /* MEMBRES */
+  .page-header h1 { font-size: 1.5rem; }
+  .page-header p { font-size: 0.82rem; }
+  .members-grid { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
+  .member-card { padding: 0.9rem 0.75rem; border-radius: 14px !important; }
+  .m-avatar { font-size: 2.2rem; }
+  .m-pseudo { font-size: 0.88rem; margin-bottom: 0.85rem; }
+  .m-section h4 { font-size: 0.68rem; }
+  .tag { font-size: 0.68rem; padding: 2px 7px; }
+
+  /* MEMBER MODAL */
+  .member-modal { width: 92vw; max-width: 360px; padding: 1.5rem 1rem; }
+  .modal-avatar { font-size: 2.8rem; }
+  .modal-pseudo { font-size: 1.1rem; }
+
+  /* PERM MODAL */
+  .perm-modal { width: 92vw; max-width: 360px; max-height: 88vh; overflow-y: auto; }
+  .modal-perm-title { font-size: 1.5rem !important; }
+
+  /* CART DRAWER */
+  .cart-drawer { width: 100vw; right: -100vw; }
+  .drawer-hdr h2 { font-size: 1rem; }
+  .ci-name { font-size: 0.82rem; }
+
+  /* LOGIN */
+  .login-page { padding: 1rem; }
+  .login-modal { padding: 2rem 1.25rem; border-radius: 16px; }
+  .login-title { font-size: 1.4rem; }
+  .login-sub { font-size: 0.82rem; }
+
+  /* MESSAGERIE */
+  .messages-page { flex-direction: column; height: calc(100vh - 52px); }
+  .msg-contacts {
+    width: 100%;
+    height: 90px;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-left: none;
+    border-bottom: 1px solid rgba(110,42,140,0.25);
+    padding: 0.4rem 0.5rem;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+  .msg-contacts-header { display: none; }
+  .contact-item {
+    flex-direction: column;
+    min-width: 60px;
+    max-width: 60px;
+    padding: 0.35rem;
+    border-bottom: none;
+    border-radius: 10px;
+    text-align: center;
+    gap: 3px;
+    align-items: center;
+  }
+  .contact-info { display: none; }
+  .contact-avatar { width: 40px; height: 40px; font-size: 1.1rem; }
+  .msg-main { flex: 1; min-height: 0; border-right: none; }
+  .msg-thread { padding: 0.75rem; gap: 0.5rem; }
+  .msg-bubble-sent, .msg-bubble-received { max-width: 85%; font-size: 0.88rem; padding: 0.55rem 0.85rem; }
+  .msg-input-bar { padding: 0.6rem 0.75rem; gap: 0.4rem; }
+  .msg-input-bar textarea { font-size: 0.88rem; min-height: 40px; }
+  .msg-send-btn { padding: 0.6rem 0.9rem; font-size: 0.82rem; }
+  .payment-panel { padding: 0.65rem; }
+  .payment-card { padding: 0.55rem 0.75rem; }
+  .payment-name { font-size: 0.8rem; }
+  .payment-link { display: none; }
+
+  /* ADMIN */
+  .admin-tabs { flex-wrap: nowrap; overflow-x: auto; }
+  .admin-table { font-size: 0.78rem; }
+  .admin-action-btn { padding: 4px 8px; font-size: 0.72rem; }
+  .role-assign-grid { gap: 0.35rem; }
+  .role-checkbox-label { font-size: 0.75rem; padding: 3px 9px; }
+
+  /* FACTION SELECT */
+  .faction-cards { flex-direction: column; align-items: center; gap: 1rem; }
+  .faction-card { width: 100%; max-width: 320px; }
+  .faction-inner { padding: 2rem 1.5rem; }
+  .faction-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .faction-name { font-size: 1.3rem; }
+  .faction-desc { font-size: 0.82rem; margin-bottom: 1.5rem; }
+  .faction-btn { padding: 0.75rem 1.5rem; }
+  .faction-title h1 { font-size: 1.6rem; }
+
+  /* FOOTER */
+  footer { padding: 0.85rem; font-size: 0.72rem; }
+}
+
+@media (max-width: 380px) {
+  .perms-grid { grid-template-columns: 1fr; }
+  .abo-grid { grid-template-columns: 1fr; }
+  .members-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 1.7rem; }
+  .faction-title h1 { font-size: 1.3rem; }
+}
