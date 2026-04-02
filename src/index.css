@@ -3373,3 +3373,143 @@ html[data-faction="kraken"] .wl-modal {
 html[data-faction="kraken"] .wl-modal::before {
   background: linear-gradient(130deg, rgba(59,130,246,.6), rgba(34,211,238,.3), rgba(59,130,246,.6)) !important;
 }
+
+/* ========== MOBILE OPTIMIZATION COMPLETE ========== */
+
+/* 1. Splash screen */
+@media (max-width: 768px) {
+  .splash-screen img { object-fit: cover; object-position: center; width: 100%; height: 100%; }
+  .splash-btn-left { left: 20% !important; top: 50% !important; width: 25% !important; height: 40% !important; }
+  .splash-btn-right { left: 55% !important; top: 50% !important; width: 25% !important; height: 40% !important; }
+}
+
+/* 2. Faction select */
+@media (max-width: 768px) {
+  .faction-page { padding: 1rem; justify-content: center; min-height: 100vh; }
+  .faction-title { margin-bottom: 1.5rem; }
+  .faction-title h1 { font-size: 1.5rem; }
+  .faction-cards { flex-direction: column; width: 100%; gap: 1rem; }
+  .faction-card { width: 100% !important; max-width: 100% !important; }
+  .faction-inner { padding: 1.5rem 1.25rem; }
+  .faction-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+  .faction-name { font-size: 1.2rem; }
+  .faction-desc { font-size: 0.82rem; margin-bottom: 1.25rem; }
+}
+
+/* 3. Login */
+@media (max-width: 768px) {
+  .login-page { padding: 0.75rem; min-height: 100vh; align-items: center; }
+  .login-modal { width: 100% !important; max-width: 100% !important; padding: 2rem 1.25rem !important; border-radius: 20px !important; }
+  .login-logo { font-size: 2.5rem; }
+  .login-title { font-size: 1.3rem !important; }
+  .mh-input { font-size: 16px !important; padding: 0.9rem 1rem !important; }
+  .mh-btn { padding: 0.9rem !important; font-size: 1rem !important; }
+}
+
+/* 4. Navbar */
+@media (max-width: 768px) {
+  .navbar { padding: 0 0.75rem !important; height: 54px !important; }
+  .brand { gap: 4px; }
+  .brand img { width: 28px !important; height: 28px !important; }
+  .brand-name { font-size: 0.9rem !important; }
+  .navbar-links { display: none !important; }
+  .cart-count { min-width: 16px; font-size: 0.65rem; padding: 0 4px; }
+}
+
+/* 5. Home */
+@media (max-width: 768px) {
+  .hero { min-height: 60vh !important; padding: 2rem 1rem 1.5rem !important; }
+  .hero-title { font-size: 2.2rem !important; line-height: 1.2; }
+  .hero-jp { font-size: 0.8rem !important; }
+  .hero-sub { font-size: 0.82rem !important; padding: 0 0.5rem; margin-bottom: 1.5rem !important; }
+  .hero-btns { flex-direction: column !important; gap: 0.6rem !important; padding: 0 1rem; }
+  .btn-p, .btn-s { width: 100% !important; padding: 0.9rem !important; font-size: 0.9rem !important; }
+  .feat-grid { grid-template-columns: 1fr !important; gap: 0.75rem !important; padding: 0 0 1rem !important; }
+  .feat-card { padding: 1.25rem 1rem !important; display: flex !important; align-items: center !important; gap: 1rem !important; text-align: left !important; }
+  .feat-icon { font-size: 2rem !important; margin-bottom: 0 !important; flex-shrink: 0; }
+  .feat-card h3 { font-size: 0.95rem !important; margin-bottom: 0.3rem !important; }
+  .feat-card p { font-size: 0.78rem !important; }
+}
+
+/* 6. Boutique */
+@media (max-width: 768px) {
+  .shop-page { padding: 0.75rem !important; }
+  .shop-header { padding: 0.75rem 0 0.5rem !important; }
+  .shop-header h1 { font-size: 1.4rem !important; }
+  .tabs { gap: 6px !important; overflow-x: auto !important; padding-bottom: 6px !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { padding: 8px 14px !important; font-size: 0.8rem !important; white-space: nowrap !important; flex-shrink: 0 !important; }
+  .perms-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.6rem !important; }
+  .perm-card { padding: 0.85rem 0.75rem !important; }
+  .role-name { font-size: 0.82rem !important; }
+  .perm-price { font-size: 0.85rem !important; }
+  .abo-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.65rem !important; }
+  .abo-card { padding: 1.1rem 0.85rem !important; }
+  .abo-name { font-size: 0.95rem !important; }
+  .abo-price { font-size: 1.3rem !important; margin-bottom: 0.85rem !important; }
+  .perm-modal, .wl-modal, .abo-modal { width: 95vw !important; max-width: 95vw !important; max-height: 90vh !important; overflow-y: auto !important; border-radius: 20px !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; }
+  .modal-perm-title { font-size: 1.4rem !important; }
+  .modal-perm-desc { font-size: 0.82rem !important; line-height: 1.6 !important; }
+}
+
+/* 7. Membres */
+@media (max-width: 768px) {
+  .members-page { padding: 0.75rem !important; }
+  .members-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.65rem !important; }
+  .member-card { padding: 0.85rem 0.7rem !important; }
+  .m-avatar { font-size: 2rem !important; }
+  .m-pseudo { font-size: 0.82rem !important; margin-bottom: 0.75rem !important; }
+  .member-modal { width: 94vw !important; max-width: 94vw !important; padding: 1.5rem 1rem !important; }
+}
+
+/* 8. Messagerie */
+@media (max-width: 768px) {
+  .messages-page { flex-direction: column !important; height: calc(100vh - 54px) !important; }
+  .msg-contacts { width: 100% !important; height: 80px !important; flex-direction: row !important; overflow-x: auto !important; overflow-y: hidden !important; border-left: none !important; border-bottom: 1px solid rgba(110,42,140,0.25) !important; padding: 0.4rem 0.5rem !important; gap: 0.4rem !important; flex-shrink: 0 !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .msg-contacts::-webkit-scrollbar { display: none; }
+  .msg-contacts-header { display: none !important; }
+  .contact-item { flex-direction: column !important; min-width: 56px !important; max-width: 56px !important; padding: 0.3rem !important; border-bottom: none !important; border-radius: 10px !important; align-items: center !important; gap: 2px !important; }
+  .contact-info { display: none !important; }
+  .contact-avatar { width: 38px !important; height: 38px !important; font-size: 1rem !important; }
+  .msg-main { flex: 1 !important; min-height: 0 !important; }
+  .msg-thread { padding: 0.75rem !important; }
+  .msg-bubble-sent, .msg-bubble-received { max-width: 88% !important; font-size: 0.85rem !important; }
+  .msg-input-bar { padding: 0.6rem 0.75rem !important; gap: 0.4rem !important; }
+  .msg-input-bar textarea { font-size: 16px !important; min-height: 40px !important; }
+  .msg-send-btn { padding: 0.6rem 0.85rem !important; font-size: 0.82rem !important; white-space: nowrap !important; }
+  .attach-btn { width: 38px !important; height: 38px !important; font-size: 1rem !important; }
+}
+
+/* 9. Admin */
+@media (max-width: 768px) {
+  .admin-tabs { overflow-x: auto !important; flex-wrap: nowrap !important; gap: 6px !important; -webkit-overflow-scrolling: touch; }
+  .admin-create-form { padding: 0.75rem !important; }
+  .role-assign-grid { gap: 0.3rem !important; }
+  .role-checkbox-label { font-size: 0.72rem !important; padding: 3px 8px !important; }
+  .admin-action-btn { padding: 4px 7px !important; font-size: 0.7rem !important; }
+}
+
+/* 10. Panier */
+@media (max-width: 768px) {
+  .cart-drawer { width: 100vw !important; right: -100vw !important; }
+  .cart-drawer.open { right: 0 !important; }
+  .drawer-hdr { padding: 1rem !important; }
+  .ci { padding: 0.6rem 0.75rem !important; }
+  .ci-name { font-size: 0.82rem !important; }
+  .ci-price { font-size: 0.82rem !important; }
+  .drawer-footer { padding: 1rem !important; }
+}
+
+/* 11. Fix général iOS */
+@media (max-width: 768px) {
+  input, textarea, select { font-size: 16px !important; }
+  * { -webkit-overflow-scrolling: touch; }
+  .navbar { position: sticky !important; top: 0 !important; }
+}
+
+@media (max-width: 380px) {
+  .perms-grid { grid-template-columns: 1fr !important; }
+  .abo-grid { grid-template-columns: 1fr !important; }
+  .members-grid { grid-template-columns: 1fr !important; }
+  .hero-title { font-size: 1.8rem !important; }
+}
