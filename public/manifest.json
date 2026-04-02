@@ -1,0 +1,14 @@
+{
+  "name": "Mont Hua",
+  "short_name": "Mont Hua",
+  "description": "Boutique officielle du serveur Mont Hua",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#140817",
+  "theme_color": "#6E2A8C",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
