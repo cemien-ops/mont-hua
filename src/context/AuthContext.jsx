@@ -178,27 +178,41 @@ export function AuthProvider({ children }) {
     saveMsgs(updated);
   };
 
-  const getMessages = () => {
-    const all = loadMessages();
-    return all.filter(m =>
-      m.toId === user?.id ||
-      m.fromId === user?.id ||
-      (m.isGroup && Array.isArray(m.participantIds) && m.participantIds.includes(user?.id))
+  const getUserMessages = () => {
+    if (!user) return [];
+    const allUsers = loadUsers();
+    const freshUser = allUsers.find(u => u.id === user.id);
+    // Combine mh_messages (legacy) + user.messages (new per-user store)
+    const flat = loadMessages().filter(m =>
+      m.toId === user.id || m.fromId === user.id ||
+      (m.isGroup && Array.isArray(m.participantIds) && m.participantIds.includes(user.id))
     );
+    const perUser = (freshUser?.messages || []);
+    // Merge, déduplique par id
+    const merged = [...flat, ...perUser];
+    const seen = new Set();
+    return merged.filter(m => { if (seen.has(m.id)) return false; seen.add(m.id); return true; });
   };
 
+  const getMessages = () => getUserMessages();
+
   const getUnreadCount = () => {
-    return loadMessages().filter(m =>
-      !m.read && (
-        m.toId === user?.id ||
-        (m.isGroup && Array.isArray(m.participantIds) && m.participantIds.includes(user?.id) && m.fromId !== user?.id)
-      )
+    return getUserMessages().filter(m =>
+      !m.read && m.fromId !== user?.id
     ).length;
   };
 
   const markRead = (messageId) => {
     const updated = loadMessages().map(m => m.id === messageId ? { ...m, read: true } : m);
     saveMsgs(updated);
+    // Aussi dans user.messages
+    const allUsers = loadUsers();
+    const updatedUsers = allUsers.map(u =>
+      u.id === user?.id
+        ? { ...u, messages: (u.messages || []).map(m => m.id === messageId ? { ...m, read: true } : m) }
+        : u
+    );
+    saveUsersStorage(updatedUsers);
   };
 
   const markAllRead = (contactId) => {
@@ -206,6 +220,14 @@ export function AuthProvider({ children }) {
       m.toId === user?.id && m.fromId === contactId ? { ...m, read: true } : m
     );
     saveMsgs(updated);
+    // Aussi dans user.messages
+    const allUsers = loadUsers();
+    const updatedUsers = allUsers.map(u =>
+      u.id === user?.id
+        ? { ...u, messages: (u.messages || []).map(m => m.fromId === contactId ? { ...m, read: true } : m) }
+        : u
+    );
+    saveUsersStorage(updatedUsers);
   };
 
   // Compatibilité avec ancien code

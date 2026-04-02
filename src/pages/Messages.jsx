@@ -38,17 +38,27 @@ export default function Messages() {
 
   useEffect(() => {
     if (!selectedConv) return;
+    const allUsers = JSON.parse(localStorage.getItem("mh_users") || "[]");
     if (selectedConv.isGroup) {
-      const msgs = JSON.parse(localStorage.getItem("mh_messages") || "[]");
-      const updated = msgs.map(m =>
-        m.groupId === selectedConv.groupId && m.fromId !== user.id ? { ...m, read: true } : m
+      const updatedUsers = allUsers.map(u =>
+        u.id === user.id
+          ? { ...u, messages: (u.messages || []).map(m =>
+              m.groupId === selectedConv.groupId && m.fromId !== user.id ? { ...m, read: true } : m
+            )}
+          : u
       );
-      localStorage.setItem("mh_messages", JSON.stringify(updated));
-      setAllMsgs(getMessages());
+      localStorage.setItem("mh_users", JSON.stringify(updatedUsers));
     } else {
-      markAllRead(selectedConv.otherId);
-      setAllMsgs(getMessages());
+      const updatedUsers = allUsers.map(u =>
+        u.id === user.id
+          ? { ...u, messages: (u.messages || []).map(m =>
+              m.fromId === selectedConv.otherId ? { ...m, read: true } : m
+            )}
+          : u
+      );
+      localStorage.setItem("mh_users", JSON.stringify(updatedUsers));
     }
+    setAllMsgs(getMessages());
   }, [selectedConv]);
 
   if (!user) return null;
@@ -213,66 +223,54 @@ export default function Messages() {
       }))
     );
 
-    if (selectedConv.isGroup) {
-      // Envoie à tous les participants du groupe (sauf soi-même)
-      const allUsers = JSON.parse(localStorage.getItem("mh_users") || "[]");
-      const msgs = JSON.parse(localStorage.getItem("mh_messages") || "[]");
-      const { groupId, participantIds, participantPseudos } = selectedConv;
+    const msgId = `msg-${Date.now()}`;
+    const date = new Date().toISOString();
+    const allUsers = JSON.parse(localStorage.getItem("mh_users") || "[]");
 
-      participantIds
-        .filter(id => id !== user.id)
-        .forEach((id, i) => {
-          const recipient = allUsers.find(u => u.id === id);
-          if (!recipient) return;
-          msgs.push({
-            id: `msg-${Date.now()}-${i}`,
-            fromId: user.id, fromPseudo: user.pseudo,
-            toId: id, toPseudo: recipient.pseudo,
-            content: input.trim(),
-            attachments: encodedAttachments,
-            date: new Date().toISOString(), read: false,
-            isGroup: true, groupId, participantIds, participantPseudos,
-          });
-        });
-      localStorage.setItem("mh_messages", JSON.stringify(msgs));
-      setTimeout(() => setAllMsgs(getMessages()), 100);
-    } else {
-      // Écrit directement dans mh_messages (contourne le filtre faction de sendMessage)
-      const allStoredUsers = JSON.parse(localStorage.getItem("mh_users") || "[]");
-      const recipient = allStoredUsers.find(u => u.id === selectedConv.otherId);
-      if (!recipient) return;
-      const msgs = JSON.parse(localStorage.getItem("mh_messages") || "[]");
-      msgs.push({
-        id: `msg-${Date.now()}`,
-        fromId: user.id, fromPseudo: user.pseudo,
-        toId: recipient.id, toPseudo: recipient.pseudo,
-        content: input.trim(),
-        attachments: encodedAttachments,
-        date: new Date().toISOString(), read: false,
+    if (selectedConv.isGroup) {
+      const { groupId, participantIds, participantPseudos } = selectedConv;
+      const groupMsg = {
+        id: msgId, fromId: user.id, fromPseudo: user.pseudo,
+        content: input.trim(), attachments: encodedAttachments, date, read: false,
+        isGroup: true, groupId, participantIds, participantPseudos,
+        groupName: selectedConv.groupName || null,
+      };
+      const updatedUsers = allUsers.map(u => {
+        if (!participantIds?.includes(u.id)) return u;
+        return { ...u, messages: [...(u.messages || []), { ...groupMsg, read: u.id === user.id }] };
       });
-      localStorage.setItem("mh_messages", JSON.stringify(msgs));
-      setTimeout(() => setAllMsgs(getMessages()), 100);
+      localStorage.setItem("mh_users", JSON.stringify(updatedUsers));
+      // Notifs push
+      const recipients = updatedUsers.filter(u => participantIds.includes(u.id) && u.id !== user.id && u.oneSignalId);
+      if (recipients.length > 0)
+        sendNotification(recipients.map(u => u.oneSignalId), `💬 ${user.pseudo} — ${selectedConv.groupName || "Groupe"}`, input.slice(0, 100)).catch(() => {});
+    } else {
+      const recipient = allUsers.find(u => u.id === selectedConv.otherId);
+      if (!recipient) return;
+      const msgForSender = {
+        id: msgId, fromId: user.id, fromPseudo: user.pseudo,
+        toId: recipient.id, toPseudo: recipient.pseudo,
+        content: input.trim(), attachments: encodedAttachments, date, read: true, isGroup: false,
+      };
+      const msgForRecipient = {
+        id: msgId, fromId: user.id, fromPseudo: user.pseudo,
+        toId: user.id, toPseudo: user.pseudo,
+        content: input.trim(), attachments: encodedAttachments, date, read: false, isGroup: false,
+      };
+      const updatedUsers = allUsers.map(u => {
+        if (u.id === user.id) return { ...u, messages: [...(u.messages || []), msgForSender] };
+        if (u.id === recipient.id) return { ...u, messages: [...(u.messages || []), msgForRecipient] };
+        return u;
+      });
+      localStorage.setItem("mh_users", JSON.stringify(updatedUsers));
+      // Notif push
+      if (recipient.oneSignalId)
+        sendNotification([recipient.oneSignalId], `💬 ${user.pseudo}`, input.slice(0, 100)).catch(() => {});
     }
 
     setInput("");
     setAttachments([]);
-
-    // Push notifications
-    const allUsers = JSON.parse(localStorage.getItem("mh_users") || "[]");
-    if (selectedConv.isGroup) {
-      const recipients = allUsers.filter(u =>
-        selectedConv.participantIds.includes(u.id) && u.id !== user.id && u.oneSignalId
-      );
-      const playerIds = recipients.map(u => u.oneSignalId).filter(Boolean);
-      if (playerIds.length > 0) {
-        sendNotification(playerIds, `💬 ${user.pseudo} — ${selectedConv.groupName || "Groupe"}`, input.slice(0, 100)).catch(() => {});
-      }
-    } else {
-      const recipient = allUsers.find(u => u.id === selectedConv.otherId && u.oneSignalId);
-      if (recipient?.oneSignalId) {
-        sendNotification([recipient.oneSignalId], `💬 ${user.pseudo}`, input.slice(0, 100)).catch(() => {});
-      }
-    }
+    setTimeout(() => setAllMsgs(getMessages()), 100);
   };
 
   const paymentPanel = (
