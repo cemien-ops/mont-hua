@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { requestPermission } from "../onesignal";
 
 const AuthContext = createContext();
 
@@ -89,18 +90,27 @@ export function AuthProvider({ children }) {
     const u = loadUsers().find(u => u.pseudo.toLowerCase() === pseudo.trim().toLowerCase() && u.password === hash);
     if (!u) return false;
     // Azery et Kraken peuvent se connecter des deux côtés
-    if (u.pseudo === "Azery" || u.pseudo === "Kraken") {
-      setUser(u);
-      localStorage.setItem(SESSION_KEY, u.id);
-      return true;
-    }
-    // Les autres membres doivent être du bon côté
-    const selectedFaction = localStorage.getItem("mh_faction");
-    if (selectedFaction && u.faction && u.faction !== selectedFaction) {
-      return "wrong_faction";
+    if (u.pseudo !== "Azery" && u.pseudo !== "Kraken") {
+      const selectedFaction = localStorage.getItem("mh_faction");
+      if (selectedFaction && u.faction && u.faction !== selectedFaction) {
+        return "wrong_faction";
+      }
     }
     setUser(u);
     localStorage.setItem(SESSION_KEY, u.id);
+    // Demande permission push et sauvegarde OneSignal ID
+    setTimeout(async () => {
+      try {
+        const osId = await requestPermission();
+        if (osId) {
+          const allUsers = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
+          const updated = allUsers.map(usr =>
+            usr.id === u.id ? { ...usr, oneSignalId: osId } : usr
+          );
+          localStorage.setItem(USERS_KEY, JSON.stringify(updated));
+        }
+      } catch {}
+    }, 2000);
     return true;
   };
 

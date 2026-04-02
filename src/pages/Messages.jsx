@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { sendNotification } from "../onesignal";
 
 function renderAvatar(avatar, size = "2.5rem") {
   if (!avatar) return <span>🌸</span>;
@@ -211,6 +212,23 @@ export default function Messages() {
 
     setInput("");
     setAttachments([]);
+
+    // Push notifications
+    const allUsers = JSON.parse(localStorage.getItem("mh_users") || "[]");
+    if (selectedConv.isGroup) {
+      const recipients = allUsers.filter(u =>
+        selectedConv.participantIds.includes(u.id) && u.id !== user.id && u.oneSignalId
+      );
+      const playerIds = recipients.map(u => u.oneSignalId).filter(Boolean);
+      if (playerIds.length > 0) {
+        sendNotification(playerIds, `💬 ${user.pseudo} — ${selectedConv.groupName || "Groupe"}`, input.slice(0, 100)).catch(() => {});
+      }
+    } else {
+      const recipient = allUsers.find(u => u.id === selectedConv.otherId && u.oneSignalId);
+      if (recipient?.oneSignalId) {
+        sendNotification([recipient.oneSignalId], `💬 ${user.pseudo}`, input.slice(0, 100)).catch(() => {});
+      }
+    }
   };
 
   const paymentPanel = (
