@@ -46,9 +46,11 @@ export default function Members() {
   const [selectedMember, setSelectedMember] = useState(null);
 
   const selectedFaction = localStorage.getItem("mh_faction") || "azery";
-  const visibleMembers = (user?.pseudo === "Azery" || user?.pseudo === "Kraken")
-    ? members.filter(m => m.faction === selectedFaction)
-    : members.filter(m => m.faction === (user?.faction || selectedFaction));
+  const visibleMembers = members.filter(m => {
+    if (user?.pseudo === "Azery" || user?.pseudo === "Kraken") return true;
+    if (!user) return m.faction === selectedFaction || m.pseudo === "Azery" || m.pseudo === "Kraken";
+    return m.faction === user.faction || m.pseudo === "Azery" || m.pseudo === "Kraken";
+  });
   const sorted = [...visibleMembers].sort((a, b) => getMaxPermPrice(b.perms) - getMaxPermPrice(a.perms));
 
   return (

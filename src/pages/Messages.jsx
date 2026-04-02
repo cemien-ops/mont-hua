@@ -22,6 +22,8 @@ export default function Messages() {
   const [copied, setCopied] = useState("");
   const [editingGroupName, setEditingGroupName] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
+  const [showNewConv, setShowNewConv] = useState(false);
+  const [searchUser, setSearchUser] = useState("");
 
   useEffect(() => {
     if (!user) { navigate("/auth"); return; }
@@ -50,6 +52,33 @@ export default function Messages() {
   }, [selectedConv]);
 
   if (!user) return null;
+
+  const allStoredUsers = JSON.parse(localStorage.getItem("mh_users") || "[]");
+  const availableUsers = allStoredUsers.filter(u => {
+    if (u.id === user.id) return false;
+    if (user.pseudo === "Azery" || user.pseudo === "Kraken") return true;
+    return u.faction === user.faction || u.pseudo === "Azery" || u.pseudo === "Kraken";
+  });
+
+  const startConversation = (otherUser) => {
+    const convKey = `dm-${otherUser.id}`;
+    const existing = conversations.find(c => c.id === convKey);
+    if (existing) {
+      setSelectedConv(existing);
+    } else {
+      setSelectedConv({
+        id: convKey,
+        isGroup: false,
+        otherId: otherUser.id,
+        pseudo: otherUser.pseudo,
+        avatar: otherUser.avatar,
+        lastMsg: null,
+        unread: 0,
+      });
+    }
+    setShowNewConv(false);
+    setSearchUser("");
+  };
 
   // Build conversations list from allMsgs
   const convMap = {};
@@ -421,9 +450,46 @@ export default function Messages() {
         </form>
       </div>
 
+      {/* Modale nouvelle conversation */}
+      {showNewConv && (
+        <div className="new-conv-modal">
+          <div className="new-conv-inner">
+            <button className="modal-close" onClick={() => { setShowNewConv(false); setSearchUser(""); }}>✕</button>
+            <h3 className="new-conv-title">Nouvelle conversation</h3>
+            <input
+              className="mh-input"
+              placeholder="Chercher un membre..."
+              value={searchUser}
+              onChange={e => setSearchUser(e.target.value)}
+              autoFocus
+            />
+            <div className="new-conv-list">
+              {availableUsers
+                .filter(u => u.pseudo.toLowerCase().includes(searchUser.toLowerCase()))
+                .map(u => (
+                  <div key={u.id} className="new-conv-item" onClick={() => startConversation(u)}>
+                    <div className="contact-avatar">
+                      {typeof u.avatar === "string" && (u.avatar.startsWith("data:") || u.avatar.startsWith("http"))
+                        ? <img src={u.avatar} alt="" style={{ width: "38px", height: "38px", borderRadius: "50%", objectFit: "cover" }} />
+                        : <span style={{ fontSize: "1.3rem" }}>{u.avatar || "🌸"}</span>}
+                    </div>
+                    <div>
+                      <div className="contact-name">{u.pseudo}</div>
+                      <div className="contact-preview">{u.perms?.[0] || "Membre"}</div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Colonne contacts — à droite */}
       <div className="msg-contacts">
-        <div className="msg-contacts-header">💬 Conversations</div>
+        <div className="msg-contacts-header">
+          <span>💬 Conversations</span>
+          <button className="new-conv-btn" onClick={() => setShowNewConv(true)}>+</button>
+        </div>
         {conversations.length === 0 && (
           <div style={{ color: "#7A6A85", padding: "1.5rem", textAlign: "center", fontSize: "0.85rem" }}>
             Aucune conversation
