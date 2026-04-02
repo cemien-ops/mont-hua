@@ -3513,3 +3513,13 @@ html[data-faction="kraken"] .wl-modal::before {
   .members-grid { grid-template-columns: 1fr !important; }
   .hero-title { font-size: 1.8rem !important; }
 }
+
+/* ========== KRAKEN MOBILE BACKGROUND ========== */
+@media (max-width: 768px) {
+  html[data-faction="kraken"] body {
+    background-image: url('https://i.imgur.com/H2y5VNL.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: scroll !important;
+  }
+}
