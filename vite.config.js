@@ -1,17 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import legacy from '@vitejs/plugin-legacy'
 
 export default defineConfig({
-  plugins: [
-    react(),
-    legacy({
-      targets: ['safari >= 13', 'ios >= 13'],
-    })
-  ],
-  base: '/',
+  plugins: [react()],
+  base: './',
   build: {
     outDir: 'dist',
-    target: 'es2015',
   }
 })
