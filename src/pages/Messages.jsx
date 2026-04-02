@@ -57,7 +57,8 @@ export default function Messages() {
   const availableUsers = allStoredUsers.filter(u => {
     if (u.id === user.id) return false;
     if (user.pseudo === "Azery" || user.pseudo === "Kraken") return true;
-    return u.faction === user.faction || u.pseudo === "Azery" || u.pseudo === "Kraken";
+    if (u.pseudo === "Azery" || u.pseudo === "Kraken") return true;
+    return u.faction === user.faction;
   });
 
   const startConversation = (otherUser) => {
@@ -74,6 +75,7 @@ export default function Messages() {
         avatar: otherUser.avatar,
         lastMsg: null,
         unread: 0,
+        _new: true,
       });
     }
     setShowNewConv(false);
@@ -104,7 +106,7 @@ export default function Messages() {
       if (!otherId) return;
       const convKey = `dm-${otherId}`;
       if (!convMap[convKey]) {
-        const contactUser = users.find(u => u.id === otherId) || { id: otherId, pseudo: otherId === "system" ? "Système" : otherId, avatar: "⚙️" };
+        const contactUser = allStoredUsers.find(u => u.id === otherId) || { id: otherId, pseudo: otherId === "system" ? "Système" : otherId, avatar: "⚙️" };
         convMap[convKey] = {
           id: convKey,
           isGroup: false,
@@ -124,7 +126,7 @@ export default function Messages() {
     if (user.pseudo === "Azery" || user.pseudo === "Kraken") return true;
     if (conv.isGroup) return true;
     if (conv.otherId === "system") return true;
-    const otherUser = users.find(u => u.id === conv.otherId);
+    const otherUser = allStoredUsers.find(u => u.id === conv.otherId);
     if (!otherUser) return true;
     if (otherUser.pseudo === "Azery" || otherUser.pseudo === "Kraken") return true;
     return otherUser.faction === user.faction;
