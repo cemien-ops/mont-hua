@@ -16,6 +16,8 @@ function loadMessages() { try { return JSON.parse(localStorage.getItem(MESSAGES_
 function saveUsersStorage(u)   { localStorage.setItem(USERS_KEY,    JSON.stringify(u)); }
 function saveMessagesStorage(m){ localStorage.setItem(MESSAGES_KEY, JSON.stringify(m)); }
 
+const DB_VERSION = "2";
+
 export function AuthProvider({ children }) {
   const [users, setUsersState] = useState([]);
   const [user,  setUser]       = useState(null);
@@ -23,12 +25,19 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     (async () => {
+      // Force réinitialisation des comptes si version changée
+      const savedVersion = localStorage.getItem("mh_db_version");
+      if (savedVersion !== DB_VERSION) {
+        localStorage.removeItem(USERS_KEY);
+        localStorage.setItem("mh_db_version", DB_VERSION);
+      }
+
       let stored = loadUsers();
       let storedMsgs = loadMessages();
 
       if (stored.length === 0) {
-        const hashAzery  = await sha256("SecteMH@2026!");
-        const hashKraken = await sha256("SecteKR@2026!");
+        const hashAzery  = await sha256("Azery");
+        const hashKraken = await sha256("Kraken");
         const azery = {
           id: "azery-001", pseudo: "Azery", password: hashAzery,
           isAdmin: true, faction: "azery", avatar: "👑",
